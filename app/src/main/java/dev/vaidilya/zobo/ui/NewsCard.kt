@@ -6,6 +6,7 @@ import androidx.compose.animation.core.infiniteRepeatable
 import androidx.compose.animation.core.rememberInfiniteTransition
 import androidx.compose.animation.core.tween
 import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
@@ -37,10 +38,13 @@ import coil.compose.AsyncImage
 fun ArticleCard(
     url: String,
     title: String,
-    description: String
+    onClick: () -> Unit
 ){
     Card(
-        modifier = Modifier.fillMaxWidth(),
+        modifier = Modifier.fillMaxWidth()
+            .clickable{
+                onClick()
+            },
         shape = CardDefaults.elevatedShape,
         elevation = CardDefaults.cardElevation(8.dp)
     ){
