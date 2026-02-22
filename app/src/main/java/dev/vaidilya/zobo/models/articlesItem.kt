@@ -1,0 +1,31 @@
+package dev.vaidilya.zobo.models
+
+data class articlesItem(
+    val canonical_url: String,
+    val collection_id: Int,
+    val comments_count: Int,
+    val cover_image: String,
+    val created_at: String,
+    val crossposted_at: String,
+    val description: String,
+    val edited_at: String,
+    val id: Int,
+    val language: String,
+    val last_comment_at: String,
+    val path: String,
+    val positive_reactions_count: Int,
+    val public_reactions_count: Int,
+    val published_at: String,
+    val published_timestamp: String,
+    val readable_publish_date: String,
+    val reading_time_minutes: Int,
+    val slug: String,
+    val social_image: String,
+    val subforem_id: Int,
+    val tag_list: List<String>,
+    val tags: String,
+    val title: String,
+    val type_of: String,
+    val url: String,
+    val user: User
+)

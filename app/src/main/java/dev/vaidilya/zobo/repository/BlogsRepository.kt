@@ -4,50 +4,40 @@ import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import dev.vaidilya.zobo.api.BlogsAPI
-import dev.vaidilya.zobo.models.GraphQLRequest
-import dev.vaidilya.zobo.models.articlesList
+import dev.vaidilya.zobo.models.articles
+import dev.vaidilya.zobo.models.detailedArticle
 import dev.vaidilya.zobo.utils.Constants
 import javax.inject.Inject
 
 class BlogsRepository @Inject constructor(private val blogsAPI: BlogsAPI) {
 
-    private val _articles = MutableLiveData<articlesList>()
-    val products: LiveData<articlesList>
+    private val _articles = MutableLiveData<articles>()
+    val products: LiveData<articles>
         get() = _articles
 
+    private val _detailedArticle = MutableLiveData<detailedArticle>()
+    val detailedArticle: LiveData<detailedArticle>
+        get() = _detailedArticle
 
-    suspend fun getArticles(endCursor: String? = null) {
-        val request = GraphQLRequest(
-            query = Constants.POSTS_QUERY,
-            variables = mapOf(
-                "endCursor" to endCursor,
-                "count" to 10
-            )
-        )
 
-        val response = blogsAPI.getArticles(request)
+    suspend fun getArticles() {
+
+        val response = blogsAPI.getArticles()
         if (response.isSuccessful && response.body() != null) {
             val newData = response.body()
-            val currentData = _articles.value
+            _articles.postValue(newData!!)
 
-            val combinedNodes = if (currentData != null && endCursor != null) {
-                currentData.data.posts.nodes + newData!!.data.posts.nodes
-            } else {
-                newData!!.data.posts.nodes
-            }
-
-            val updatedArticlesList = newData!!.copy(
-                data = newData.data.copy(
-                    posts = newData.data.posts.copy(
-                        nodes = combinedNodes
-                    )
-                )
-            )
-
-            _articles.postValue(updatedArticlesList)
-            Log.d("TAG", updatedArticlesList.toString())
+            Log.d("TAG", "Api called"+newData.toString())
         } else {
             Log.d("TAG", "Error" + response.errorBody().toString())
+        }
+    }
+
+    suspend fun getFullArticle(articleId: Int){
+        val response = blogsAPI.getFullArticle(articleId)
+        if (response.isSuccessful && response.body() != null) {
+            val newData = response.body()
+            _detailedArticle.postValue(newData!!)
         }
     }
 

@@ -12,6 +12,7 @@ import javax.inject.Inject
 class BlogsViewModel @Inject constructor(private val blogsRepository: BlogsRepository) : ViewModel() {
 
     val articlesLiveData get() = blogsRepository.products
+    val detailedArticleLiveData get() = blogsRepository.detailedArticle
 
     init{
         viewModelScope.launch {
@@ -19,9 +20,9 @@ class BlogsViewModel @Inject constructor(private val blogsRepository: BlogsRepos
         }
     }
 
-    fun loadMoreArticles(endCursor: String?) {
+    suspend fun getDetailedArticle(id: Int){
         viewModelScope.launch {
-            blogsRepository.getArticles(endCursor)
+            blogsRepository.getFullArticle(id)
         }
     }
 

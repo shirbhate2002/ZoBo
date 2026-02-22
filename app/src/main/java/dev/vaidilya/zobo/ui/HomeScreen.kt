@@ -18,21 +18,21 @@ import dev.vaidilya.zobo.viewModel.BlogsViewModel
 @Composable
 fun HomeScreen(
     modifier: Modifier = Modifier,
-    navController: NavHostController
+    navController: NavHostController,
+    onItemClick: (Int) -> Unit
 ) {
 
     val viewModel = hiltViewModel<BlogsViewModel>()
     val products = viewModel.articlesLiveData.observeAsState()
 
     val listState = rememberLazyListState()
-    val productsList = products.value?.data?.posts?.nodes.orEmpty()
-    val endCursor = products.value?.data?.posts?.pageInfo?.endCursor
+    val productsList = products.value.orEmpty()
 
     LaunchedEffect(listState.firstVisibleItemIndex, productsList.size) {
         if (
             listState.layoutInfo.visibleItemsInfo.lastOrNull()?.index == productsList.lastIndex
         ) {
-            viewModel.loadMoreArticles(endCursor)
+            //viewModel.loadMoreArticles(endCursor)
         }
     }
 
@@ -43,14 +43,12 @@ fun HomeScreen(
         verticalArrangement = Arrangement.spacedBy(16.dp)
     ) {
         items(
-            items = products.value?.data?.posts?.nodes.orEmpty()
+            items = products.value.orEmpty()
         ) { product ->
             ArticleCard(
-                url = product.featuredImage.node.mediaItemUrl,
-                title = product.title,
-                onClick={
-                    navController.navigate("Article"+"/${product.uri.replace("/","")}")
-                }
+                articlesItem = product,
+                navController = navController,
+                onItemClick
             )
         }
     }

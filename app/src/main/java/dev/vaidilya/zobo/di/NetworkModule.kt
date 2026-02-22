@@ -32,7 +32,6 @@ class NetworkModule {
             .addInterceptor { chain ->
                 chain.proceed(
                     chain.request().newBuilder()
-                        .addHeader("x-api-key", Constants.X_API_KEY)
                         .build()
                 )
             }

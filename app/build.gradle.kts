@@ -65,6 +65,7 @@ dependencies {
 
     implementation(libs.hilt.android)
     ksp(libs.hilt.compiler)
+    ksp("androidx.room:room-compiler:2.8.4")
 
     implementation(libs.retrofit)
     implementation(libs.retrofit.converter.gson)
@@ -74,5 +75,6 @@ dependencies {
 
     implementation("androidx.webkit:webkit:1.11.0")
 
+    implementation("androidx.room:room-runtime:2.8.4")
 
 }
